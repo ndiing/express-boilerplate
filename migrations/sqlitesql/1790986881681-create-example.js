@@ -1,8 +1,8 @@
 /**
  * @param {import('@ndiinginc/dal/types/migration').Context} context
  */
-module.exports.up = async function up({ schema } = {}) {
-    schema().createTable("example", (table) => {
+module.exports.up = async function up(context) {
+    context.schema().createTable("example", (table) => {
         table.column("id").integer().primaryKey().identity();
         table.column("name").text();
     });
@@ -11,6 +11,6 @@ module.exports.up = async function up({ schema } = {}) {
 /**
  * @param {import('@ndiinginc/dal/types/migration').Context} context
  */
-module.exports.down = async function down({ schema } = {}) {
-    schema().dropTable("example");
+module.exports.down = async function down(context) {
+    context.schema().dropTable("example");
 };
