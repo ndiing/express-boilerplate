@@ -15,7 +15,7 @@ async function generate({ dir, excludes = [] } = {}) {
 
             if (excludes.some((regex) => regex.test(file)) || dirent.isDirectory()) {
                 // console.log(styleText(['yellow'],"↶"), styleText(['dim'],relative));
-                
+
                 continue;
             }
 

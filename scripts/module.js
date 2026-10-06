@@ -205,7 +205,7 @@ async function generate({ name, input, excludeHeaders = [], URLPatterns = [] } =
 
     try {
         const parsed = await parse(input, { excludeHeaders, URLPatterns });
-        
+
         const resources = [
             ["index.js", path.join(modulesDir, name, "index.js")],
             ["controller.js", path.join(modulesDir, name, "controller.js")],
@@ -219,7 +219,7 @@ async function generate({ name, input, excludeHeaders = [], URLPatterns = [] } =
         for (const [source, target] of resources) {
             if (fs.existsSync(target)) {
                 console.log(styleText(["yellow"], "↶"), styleText(["dim"], target.replace(path.resolve(), "")));
-                
+
                 continue;
             }
 
