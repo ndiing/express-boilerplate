@@ -29,7 +29,7 @@ async function generate({ dir, excludes = [] } = {}) {
             console.log(styleText(["white"], "↷"), styleText(["dim"], relative));
         }
 
-        const file = path.resolve("fixtures", "review.md");
+        const file = path.resolve("temp", "review.md");
         const relative = file.replace(dir, "");
         fs.writeFileSync(file, code);
 
