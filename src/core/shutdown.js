@@ -2,6 +2,10 @@ const { beforeShutdown } = require("./before-shutdown.js");
 
 let isShutingDown = false;
 
+/**
+ * @param {import('http').Server} server 
+ * @param {*} signal 
+ */
 async function shutdown(server, signal) {
     if (isShutingDown) return;
     isShutingDown = true;

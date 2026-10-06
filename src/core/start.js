@@ -3,6 +3,9 @@ const PORT = process.env.PORT || 3000;
 const os = require("os");
 const { beforeStart } = require("./before-start.js");
 
+/**
+ * @param {import('http').Server} server 
+ */
 async function start(server) {
     try {
         await beforeStart();

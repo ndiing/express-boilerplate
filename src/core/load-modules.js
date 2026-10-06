@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("node:path");
 
+/**@param {import("express").Application} app */
 function loadModules(app) {
     const dir = path.resolve("src", "modules");
     for (const name of fs.readdirSync(dir)) {

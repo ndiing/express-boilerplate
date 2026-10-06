@@ -1,4 +1,10 @@
 function errorHandler() {
+    /**
+     * @param {Error} err
+     * @param {import("express").Request} req
+     * @param {import("express").Response} res
+     * @param {import("express").NextFunction} next
+    */
     return function (err, req, res, next) {
         res.status(err.status || 500).json({
             error: {
