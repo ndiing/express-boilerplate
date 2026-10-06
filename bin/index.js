@@ -44,6 +44,7 @@ const cli = {
                     /scripts/,
                     // /tests/,
                 ],
+                ...params,
             });
         },
     },
@@ -66,11 +67,12 @@ const cli = {
                     /^cookie/i,
                     /^Content-Length/i,
                 ],
-                URLPatterns: [
+                urlPatterns: [
                     // URLPattern
                     new URLPattern("https://jsonplaceholder.typicode.com/posts/:id/comments"),
                     new URLPattern("https://jsonplaceholder.typicode.com/posts/:id"),
                 ],
+                ...params,
             });
         },
     },

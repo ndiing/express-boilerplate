@@ -5,7 +5,7 @@ const { inspect, styleText } = require("util");
 /**
  * @typedef ParseOptions
  * @property {RegExp[]} excludeHeaders
- * @property {URLPattern[]} URLPatterns
+ * @property {URLPattern[]} urlPatterns
  */
 
 /**
@@ -17,7 +17,7 @@ const { inspect, styleText } = require("util");
  * @param {ParseOptions} options
  * @returns {Promise<ParseResult>}
  */
-async function parse(input, { excludeHeaders = [], URLPatterns = [] } = {}) {
+async function parse(input, { excludeHeaders = [], urlPatterns = [] } = {}) {
     const parsed = path.parse(input);
     const output = path.join(parsed.dir, parsed.name + ".json");
     fs.writeFileSync(output, fs.readFileSync(input));
@@ -39,7 +39,7 @@ async function parse(input, { excludeHeaders = [], URLPatterns = [] } = {}) {
         let pathname = url.pathname;
         let params = {};
 
-        for (const pattern of URLPatterns) {
+        for (const pattern of urlPatterns) {
             const match = pattern.exec(url);
             if (match) {
                 pathname = pattern.pathname;
@@ -197,14 +197,16 @@ function template(strings, ...values) {
 }
 module.exports.template = template;
 
-async function generate({ name, input, excludeHeaders = [], URLPatterns = [] } = {}) {
+async function generate(options = {}) {
+    const { name, input, excludeHeaders = [], urlPatterns = [], dryRun = false, force = false } = options;
+
     const templatesDir = path.resolve("scripts", "templates");
     const modulesDir = path.resolve("src", "modules");
     const testsDir = path.resolve("tests");
     const restDir = path.resolve("rest");
 
     try {
-        const parsed = await parse(input, { excludeHeaders, URLPatterns });
+        const parsed = await parse(input, { excludeHeaders, urlPatterns });
 
         const resources = [
             ["index.js", path.join(modulesDir, name, "index.js")],
@@ -217,7 +219,7 @@ async function generate({ name, input, excludeHeaders = [], URLPatterns = [] } =
             ["example.http.js", path.join(restDir, `${name}.http`)],
         ];
         for (const [source, target] of resources) {
-            if (fs.existsSync(target)) {
+            if (fs.existsSync(target) && !dryRun && !force) {
                 console.log(styleText(["yellow"], "↶"), styleText(["dim"], target.replace(path.resolve(), "")));
 
                 continue;
@@ -226,14 +228,18 @@ async function generate({ name, input, excludeHeaders = [], URLPatterns = [] } =
             const render = require(path.join(templatesDir, source));
             const result = await render({ name, ...parsed });
 
-            const dir = path.dirname(target);
-            if (!fs.existsSync(dir)) {
-                fs.mkdirSync(dir, { recursive: true });
+            if (dryRun) {
+                console.log(target, result);
+            } else {
+                const dir = path.dirname(target);
+                if (!fs.existsSync(dir)) {
+                    fs.mkdirSync(dir, { recursive: true });
+                }
+
+                fs.writeFileSync(target, result);
+
+                console.log(styleText(["white"], "↷"), styleText(["dim"], target.replace(path.resolve(), "")));
             }
-
-            fs.writeFileSync(target, result);
-
-            console.log(styleText(["white"], "↷"), styleText(["dim"], target.replace(path.resolve(), "")));
         }
 
         console.log(styleText(["green"], "✓"), styleText(["dim"], name));
