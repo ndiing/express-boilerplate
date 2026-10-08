@@ -248,3 +248,40 @@ async function generate(options = {}) {
     }
 }
 module.exports.generate = generate;
+
+function remove({ name } = {}) {
+    const modulesDir = path.resolve("src", "modules");
+    const testsDir = path.resolve("tests");
+    const restDir = path.resolve("rest");
+
+    const moduleDir = path.join(modulesDir, name);
+    const relativeModuleDir = moduleDir.replace(path.resolve(), "");
+    if (fs.existsSync(moduleDir)) {
+        fs.rmSync(moduleDir, { recursive: true, force: true });
+        console.log(styleText([], "↷"), styleText(["dim"], relativeModuleDir));
+    } else {
+        console.log(styleText(["yellow"], "↶"), styleText(["dim"], relativeModuleDir));
+    }
+
+    const testFile = path.join(testsDir, `${name}.test.js`);
+    const relativeTestFile = testFile.replace(path.resolve(), "");
+    if (fs.existsSync(testFile)) {
+        fs.unlinkSync(testFile);
+        console.log(styleText([], "↷"), styleText(["dim"], relativeTestFile));
+    } else {
+        console.log(styleText(["yellow"], "↶"), styleText(["dim"], relativeTestFile));
+    }
+
+    const restFile = path.join(restDir, `${name}.http`);
+    const relativeRestFile = restFile.replace(path.resolve(), "");
+    if (fs.existsSync(restFile)) {
+        fs.unlinkSync(restFile);
+        console.log(styleText([], "↷"), styleText(["dim"], relativeRestFile));
+    } else {
+        console.log(styleText(["yellow"], "↶"), styleText(["dim"], relativeRestFile));
+    }
+
+    console.log(styleText(["green"], "✓"), name);
+}
+
+module.exports.remove = remove;

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const path = require("path");
-const modules = require("../scripts/module.js");
+const modulee = require("../scripts/module.js");
 const review = require("../scripts/review.js");
 
 function parseParams(arr) {
@@ -55,10 +55,13 @@ const cli = {
                 ...params,
             });
         },
+        remove: () => {
+            review.remove();
+        },
     },
     module: {
         generate: async (params = {}) => {
-            await modules.generate({
+            await modulee.generate({
                 //
                 name: "jsonplaceholder",
                 input: path.resolve("fixtures", "jsonplaceholder.har"),
@@ -83,7 +86,12 @@ const cli = {
                 ...params,
             });
         },
+        remove: (params) => {
+            modulee.remove({
+                name: params.name,
+            });
+        },
     },
 };
 
-cli[method][action](params);
+cli?.[method]?.[action]?.(params);

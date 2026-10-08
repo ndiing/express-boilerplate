@@ -44,3 +44,13 @@ async function generate({ dir, excludes = [], includes = [] } = {}) {
     }
 }
 module.exports.generate = generate;
+
+function remove() {
+    const file = path.resolve("temp", "review.md");
+    const relative = file.replace(path.resolve(), "");
+    if (fs.existsSync(file)) {
+        fs.unlinkSync(file);
+    }
+    console.log(styleText(["green"], "✓"), styleText(["dim"], relative));
+}
+module.exports.remove = remove;
