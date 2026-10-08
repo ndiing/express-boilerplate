@@ -206,7 +206,7 @@ async function generate(options = {}) {
     const restDir = path.resolve("rest");
 
     try {
-        const parsed = await parse(input, { excludeHeaders, urlPatterns });
+        const parsed = input&&await parse(input, { excludeHeaders, urlPatterns })||{};
 
         const resources = [
             ["index.js", path.join(modulesDir, name, "index.js")],
@@ -245,6 +245,7 @@ async function generate(options = {}) {
         console.log(styleText(["green"], "✓"), styleText(["dim"], name));
     } catch (error) {
         console.log(styleText(["red"], "✗"), styleText(["dim"], name));
+        console.error(error)
     }
 }
 module.exports.generate = generate;

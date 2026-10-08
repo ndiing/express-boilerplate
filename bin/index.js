@@ -62,7 +62,7 @@ const cli = {
     module: {
         generate: async (params = {}) => {
             await modulee.generate({
-                //
+                
                 name: "jsonplaceholder",
                 input: path.resolve("fixtures", "jsonplaceholder.har"),
                 excludeHeaders: [

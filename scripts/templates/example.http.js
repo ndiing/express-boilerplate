@@ -36,11 +36,11 @@ async function transformBody(mimeType, body, headers) {
 
 /**@param {import("../module").ParseResult} parsed*/
 module.exports = async (parsed) => /* prettier-ignore */ template`@sessionId=sessionId
-${parsed.params.map(([name,value]) => `@${name}=${value}
-`).join('')}${await Promise.all(parsed.requests?.map(async (req)=>`
+${template`${parsed.params?.map(([name,value]) => `@${name}=${value}
+`).join('')}`}${template`${parsed.requests?.length&&await Promise.all(parsed.requests?.map(async (req)=>`
 ###
 ${req.method} http://localhost:3000/api/${parsed.name}/{{sessionId}}${transformPathname(req.pathname)}${template`
 ${transformQuery(req.query)}`}${template`
 ${transformHeaders(req.headers)}`}${template`
 
-${await transformBody(req.mimeType,req.body,req.headers)}`}`))}`;
+${await transformBody(req.mimeType,req.body,req.headers)}`}`))}`}`;
