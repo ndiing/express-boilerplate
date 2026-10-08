@@ -4,7 +4,7 @@ const util = require("util");
 
 const { styleText } = util;
 
-async function generate({ dir, excludes = [] } = {}) {
+async function generate({ dir, excludes = [], includes = [] } = {}) {
     try {
         let code = "";
 
@@ -13,7 +13,12 @@ async function generate({ dir, excludes = [] } = {}) {
             const relative = file.replace(dir, "");
             const extname = path.extname(file).slice(1);
 
-            if (excludes.some((regex) => regex.test(file)) || dirent.isDirectory()) {
+            if (
+                //
+                excludes.some((regex) => regex.test(file)) ||
+                dirent.isDirectory() ||
+                !includes.some((regex) => regex.test(file))
+            ) {
                 // console.log(styleText(['yellow'],"↶"), styleText(['dim'],relative));
 
                 continue;

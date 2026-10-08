@@ -37,12 +37,20 @@ const cli = {
                     /bin/,
                     /.*\.db/,
                     /fixtures/,
-                    /migrations/,
+                    // /migrations/,
                     /nodemon\.json/,
                     /package(-lock)?.json/,
                     /rest/,
-                    /scripts/,
+                    /scripts\\review\.js/,
+                    /dist/,
+                    /out/,
+                    /temp\//,
                     // /tests/,
+                ],
+                includes: [
+                    //RegExp
+                    /scripts/,
+                    /scripts\\templates/,
                 ],
                 ...params,
             });
